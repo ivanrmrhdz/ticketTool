@@ -20,7 +20,7 @@ export class LoginComponent {
   onLogin() {
    
     this.masterSrv.login(this.loginObj).subscribe((res:any) => { 
-    
+
       if(res.result){
         localStorage.setItem('ticketUser', JSON.stringify(res.data)); 
         this.router.navigateByUrl('dashboard'); 
@@ -30,3 +30,4 @@ export class LoginComponent {
     })
   }
 }
+

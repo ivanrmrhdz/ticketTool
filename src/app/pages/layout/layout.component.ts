@@ -1,11 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-layout',
-  imports: [],
+  imports: [RouterOutlet, RouterLink],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.css'
 })
 export class LayoutComponent {
 
+  router = inject(Router); 
+  
+  onLogOut(){
+    localStorage.removeItem('ticketUser'); 
+    this.router.navigateByUrl('login'); 
+
+
+  }
 }

@@ -1,10 +1,12 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { MasterService } from '../../services/master.service';
 import { FormsModule } from '@angular/forms';
+import { JsonPipe } from '@angular/common';
+import { find } from 'rxjs';
 
 @Component({
   selector: 'app-parent-category',
-  imports: [FormsModule],
+  imports: [FormsModule, JsonPipe],
   templateUrl: './parent-category.component.html',
   styleUrl: './parent-category.component.css'
 })
@@ -15,7 +17,13 @@ export class ParentCategoryComponent implements OnInit {
   newObj: any = {
     "categoryId": 0,
     "categoryName": "",
-    "deptId": 0
+    "deptId": 0, 
+    "deptName":""
+  }
+  itemSelected:any = {
+    "deptId": 0,
+    "deptName": "",
+    "createdDate": ""
   }
   ngOnInit(): void {
     this.getDridData();
@@ -49,10 +57,13 @@ debugger;
   }
 
   onEdit(data: any) {
-    this.newObj = data;
+    this.newObj = Object.assign(this.newObj, data);
+    this.findDepartmentId(); 
+    console.log(this.newObj);
   }
 
   update() {
+
     this.masterSrv.updatePCategory(this.newObj).subscribe((res: any) => {
       if (res.result) {
         alert("Parent Category Updated Successfully");
@@ -75,5 +86,22 @@ debugger;
         }
       })
     }
+  }
+  onReset(){
+    this.newObj = {
+      "categoryId": 0,
+      "categoryName": "",
+      "deptId": 0
+    }
+  }
+  onChangeDepartment(){
+    this.findDepartmentId(); 
+  }
+
+  findDepartmentId(){
+  
+   this.newObj.deptId = this.departmentList.find((deparment)=>{
+     return deparment.deptName == this.newObj.deptName; 
+    }).deptId; 
   }
 }

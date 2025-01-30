@@ -69,4 +69,11 @@ export class DepartmentComponent implements OnInit {
       })
     }
   }
+  onReset(){
+    this.newDepartmentObj ={
+      "deptId": 0,
+      "deptName": "",
+      "createdDate": ""
+    }
+  }
 }

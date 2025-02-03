@@ -5,28 +5,28 @@ import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-child-category',
-  imports: [FormsModule, JsonPipe],
+  imports: [FormsModule],
   templateUrl: './child-category.component.html',
   styleUrl: './child-category.component.css'
 })
 export class ChildCategoryComponent {
-masterSrv = inject(MasterService);
+  masterSrv = inject(MasterService);
   gridList: any[] = [];
-  parentCategoryList: any[] = []; 
+  parentCategoryList: any[] = [];
   newObj: any = {
     "childCategoryId": 0,
     "categoryName": "",
-    "parentCategoryId": 0, 
-    "parentCategoryName": "", 
+    "parentCategoryId": 0,
+    "parentCategoryName": "",
   }
   ngOnInit(): void {
     this.getDridData();
-    this.getParentCategory(); 
+    this.getParentCategory();
   }
 
   getParentCategory() {
     this.masterSrv.getAllPCategory().subscribe((res: any) => {
-      this.parentCategoryList = res.data; 
+      this.parentCategoryList = res.data;
       console.log(this.parentCategoryList);
     })
   }
@@ -52,13 +52,7 @@ masterSrv = inject(MasterService);
 
   onEdit(data: any) {
     this.newObj = Object.assign(this.newObj, data);
-
-    console.log(this.parentCategoryList.find((category)=>{
-      return category.categoryName == this.newObj.parentCategoryName; 
-     }).categoryId );
-
-    //this.findParentCategoryId(); 
-    console.log(this.newObj);
+    this.findParentCategoryId();
   }
 
   update() {
@@ -85,21 +79,29 @@ masterSrv = inject(MasterService);
       })
     }
   }
-  onReset(){
+  onReset() {
     this.newObj = {
       "childCategoryId": 0,
       "categoryName": "",
       "parentCategoryId": 0
     }
   }
-  onChangeDepartment(){
-    this.findParentCategoryId(); 
+  onChangeDepartment() {
+    this.findParentCategoryId();
   }
 
-  findParentCategoryId(){
-   
-     this.newObj.parentCategoryId = this.parentCategoryList.find((category)=>{
-      return category.categoryName == this.newObj.parentCategoryName; 
-      }).categoryId; 
-   }
+  findParentCategoryId() {
+    const checkID: any = this.parentCategoryList.find((category) => {
+      return category.categoryName == this.newObj.parentCategoryName;
+    });
+
+    if (checkID === undefined) {
+      alert(`The parent category: ${this.newObj.parentCategoryName} didn't loger exists on database`)
+    } else {
+      this.newObj.parentCategoryId = this.parentCategoryList.find((category) => {
+        return category.categoryName == this.newObj.parentCategoryName;
+      }).categoryId;
+    }
+
+  }
 }

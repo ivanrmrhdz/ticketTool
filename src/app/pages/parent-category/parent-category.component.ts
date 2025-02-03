@@ -6,7 +6,7 @@ import { find } from 'rxjs';
 
 @Component({
   selector: 'app-parent-category',
-  imports: [FormsModule, JsonPipe],
+  imports: [FormsModule],
   templateUrl: './parent-category.component.html',
   styleUrl: './parent-category.component.css'
 })
